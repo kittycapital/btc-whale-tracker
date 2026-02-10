@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>BTC 고래 추적기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-card: #12121a;
+  --bg-card-hover: #1a1a28;
+  --bg-row-hover: #16162280;
+  --border: #1e1e30;
+  --border-bright: #2a2a45;
+  --text-primary: #e8e8f0;
+  --text-secondary: #8888a8;
+  --text-dim: #555570;
+  --accent-orange: #f7931a;
+  --accent-orange-dim: #f7931a30;
+  --accent-green: #00d4a1;
+  --accent-green-dim: #00d4a120;
+  --accent-red: #ff4466;
+  --accent-red-dim: #ff446620;
+  --accent-blue: #4488ff;
+  --accent-blue-dim: #4488ff20;
+  --gradient-gold: linear-gradient(135deg, #f7931a, #ffd93d);
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Noto Sans KR', sans-serif;
+  min-height: 100vh;
+  line-height: 1.5;
+}
+
+.mono { font-family: 'JetBrains Mono', monospace; }
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  top: 0; left: 0; width: 100%; height: 100%;
+  background: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px 16px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Header */
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 28px;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.btc-icon {
+  width: 44px;
+  height: 44px;
+  background: var(--gradient-gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 22px;
+  font-weight: 700;
+  color: #0a0a0f;
+  box-shadow: 0 0 24px #f7931a40;
+  flex-shrink: 0;
+}
+
+.header h1 {
+  font-size: 22px;
+  font-weight: 700;
+  letter-spacing: -0.5px;
+  background: var(--gradient-gold);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.header-meta {
+  text-align: right;
+  font-size: 12px;
+  color: var(--text-dim);
+}
+
+.header-meta .price {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--accent-orange);
+}
+
+.update-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.update-badge::before {
+  content: '';
+  width: 6px;
+  height: 6px;
+  background: var(--accent-green);
+  border-radius: 50%;
+  animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+/* Tier Cards */
+.tier-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.tier-card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px;
+  transition: all 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.tier-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+}
+
+.tier-card.mega::before { background: var(--gradient-gold); }
+.tier-card.large::before { background: linear-gradient(90deg, var(--accent-blue), #8844ff); }
+.tier-card.mid::before { background: linear-gradient(90deg, var(--accent-green), #44ddaa); }
+
+.tier-label {
+  font-size: 11px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  margin-bottom: 8px;
+}
+
+.tier-count {
+  font-size: 32px;
+  font-weight: 700;
+  line-height: 1;
+  margin-bottom: 4px;
+}
+
+.tier-card.mega .tier-count { color: var(--accent-orange); }
+.tier-card.large .tier-count { color: var(--accent-blue); }
+.tier-card.mid .tier-count { color: var(--accent-green); }
+
+.tier-detail {
+  font-size: 12px;
+  color: var(--text-secondary);
+}
+
+.tier-btc {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+/* Sentiment Banner */
+.sentiment-bar {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 16px 20px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.sentiment-label {
+  font-size: 13px;
+  color: var(--text-secondary);
+}
+
+.sentiment-value {
+  font-size: 18px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sentiment-value.acc { color: var(--accent-green); }
+.sentiment-value.dist { color: var(--accent-red); }
+.sentiment-value.neutral { color: var(--text-dim); }
+
+.sentiment-arrow { font-size: 20px; }
+
+.sentiment-detail {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-align: right;
+}
+
+/* Section Tabs */
+.section-tabs {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 16px;
+  background: var(--bg-card);
+  border-radius: 10px;
+  padding: 4px;
+  border: 1px solid var(--border);
+}
+
+.tab-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: none;
+  background: transparent;
+  color: var(--text-dim);
+  font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: all 0.2s;
+}
+
+.tab-btn.active {
+  background: var(--accent-orange-dim);
+  color: var(--accent-orange);
+  font-weight: 700;
+}
+
+.tab-btn:hover:not(.active) {
+  color: var(--text-secondary);
+  background: var(--bg-card-hover);
+}
+
+/* Tab Panels */
+.tab-panel { display: none; }
+.tab-panel.active { display: block; }
+
+/* Whale Table */
+.table-wrapper {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  background: var(--bg-card);
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 700px;
+}
+
+thead th {
+  padding: 12px 14px;
+  text-align: left;
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  border-bottom: 1px solid var(--border);
+  white-space: nowrap;
+  position: sticky;
+  top: 0;
+  background: var(--bg-card);
+  cursor: pointer;
+  user-select: none;
+}
+
+thead th:hover {
+  color: var(--text-secondary);
+}
+
+thead th.sorted-asc::after { content: ' ▲'; color: var(--accent-orange); }
+thead th.sorted-desc::after { content: ' ▼'; color: var(--accent-orange); }
+
+tbody tr {
+  border-bottom: 1px solid var(--border);
+  transition: background 0.15s;
+}
+
+tbody tr:hover {
+  background: var(--bg-row-hover);
+}
+
+tbody tr:last-child {
+  border-bottom: none;
+}
+
+td {
+  padding: 12px 14px;
+  font-size: 13px;
+  white-space: nowrap;
+}
+
+.rank {
+  font-weight: 700;
+  color: var(--text-dim);
+  width: 36px;
+  text-align: center;
+}
+
+.rank-top3 { color: var(--accent-orange); }
+
+.addr-cell {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent-blue);
+  cursor: pointer;
+}
+
+.addr-cell:hover {
+  text-decoration: underline;
+}
+
+.balance-btc {
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.balance-usd {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.change-positive {
+  color: var(--accent-green);
+  font-weight: 600;
+}
+
+.change-negative {
+  color: var(--accent-red);
+  font-weight: 600;
+}
+
+.change-zero {
+  color: var(--text-dim);
+}
+
+.tier-badge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+  display: inline-block;
+}
+
+.tier-badge.mega {
+  background: var(--accent-orange-dim);
+  color: var(--accent-orange);
+}
+
+.tier-badge.large {
+  background: var(--accent-blue-dim);
+  color: var(--accent-blue);
+}
+
+.tier-badge.mid {
+  background: var(--accent-green-dim);
+  color: var(--accent-green);
+}
+
+/* Transfers */
+.transfer-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.transfer-item {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  transition: background 0.15s;
+}
+
+.transfer-item:hover {
+  background: var(--bg-card-hover);
+}
+
+.transfer-dir {
+  width: 36px;
+  height: 36px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.transfer-dir.in {
+  background: var(--accent-green-dim);
+  color: var(--accent-green);
+}
+
+.transfer-dir.out {
+  background: var(--accent-red-dim);
+  color: var(--accent-red);
+}
+
+.transfer-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.transfer-addr {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 12px;
+  color: var(--accent-blue);
+  cursor: pointer;
+}
+
+.transfer-time {
+  font-size: 11px;
+  color: var(--text-dim);
+}
+
+.transfer-amount {
+  text-align: right;
+  flex-shrink: 0;
+}
+
+.transfer-btc {
+  font-weight: 700;
+  font-size: 14px;
+}
+
+.transfer-btc.in { color: var(--accent-green); }
+.transfer-btc.out { color: var(--accent-red); }
+
+.transfer-usd {
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+/* Footer */
+.footer {
+  margin-top: 28px;
+  padding-top: 16px;
+  border-top: 1px solid var(--border);
+  font-size: 11px;
+  color: var(--text-dim);
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+/* Disclaimer */
+.disclaimer {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-left: 3px solid var(--accent-orange);
+  border-radius: 0 8px 8px 0;
+  padding: 12px 16px;
+  margin-bottom: 20px;
+  font-size: 11px;
+  color: var(--text-dim);
+  line-height: 1.6;
+}
+
+/* Loading */
+.loading {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text-dim);
+}
+
+.loading-spinner {
+  width: 32px;
+  height: 32px;
+  border: 3px solid var(--border);
+  border-top-color: var(--accent-orange);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  margin: 0 auto 16px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Responsive */
+@media (max-width: 640px) {
+  .container { padding: 14px 10px; }
+  
+  .header { margin-bottom: 20px; }
+  .header h1 { font-size: 18px; }
+  .btc-icon { width: 36px; height: 36px; font-size: 18px; }
+  
+  .tier-grid { grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .tier-card { padding: 12px; }
+  .tier-count { font-size: 24px; }
+  .tier-label { font-size: 10px; }
+  .tier-detail { font-size: 11px; }
+  
+  .sentiment-bar { padding: 12px 14px; }
+  
+  .tab-btn { padding: 8px 10px; font-size: 12px; }
+  
+  td { padding: 10px 10px; font-size: 12px; }
+  thead th { padding: 10px; font-size: 10px; }
+  
+  .transfer-item { padding: 10px 12px; }
+}
+
+/* Scrollbar */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: var(--bg-primary); }
+::-webkit-scrollbar-thumb { background: var(--border-bright); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+</style>
+</head>
+<body>
+
+<div class="container" id="app">
+  <div class="loading" id="loading">
+    <div class="loading-spinner"></div>
+    <div>데이터 로딩 중...</div>
+  </div>
+</div>
+
+<script>
+const DATA_URL = 'data/whales.json';
+
+function formatNumber(n, decimals = 0) {
+  if (n == null) return '-';
+  return n.toLocaleString('ko-KR', { minimumFractionDigits: decimals, maximumFractionDigits: decimals });
+}
+
+function formatUSD(n) {
+  if (n == null) return '-';
+  if (n >= 1e9) return '$' + (n / 1e9).toFixed(2) + 'B';
+  if (n >= 1e6) return '$' + (n / 1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return '$' + (n / 1e3).toFixed(0) + 'K';
+  return '$' + formatNumber(n, 0);
+}
+
+function formatBTC(n) {
+  if (n == null) return '-';
+  if (Math.abs(n) >= 1000) return formatNumber(n, 1) + ' BTC';
+  return formatNumber(n, 2) + ' BTC';
+}
+
+function formatChange(val) {
+  if (val == null) return '<span class="change-zero">-</span>';
+  if (val === 0) return '<span class="change-zero">0</span>';
+  const cls = val > 0 ? 'change-positive' : 'change-negative';
+  const sign = val > 0 ? '+' : '';
+  return `<span class="${cls}">${sign}${formatBTC(val)}</span>`;
+}
+
+function shortenAddr(addr) {
+  if (!addr) return '';
+  if (addr.length <= 16) return addr;
+  return addr.slice(0, 8) + '...' + addr.slice(-6);
+}
+
+function tierClass(tier) {
+  if (tier === '$100M+') return 'mega';
+  if (tier === '$50M-100M') return 'large';
+  return 'mid';
+}
+
+function timeSince(dateStr) {
+  if (!dateStr) return '';
+  const diff = Date.now() - new Date(dateStr).getTime();
+  const mins = Math.floor(diff / 60000);
+  if (mins < 60) return `${mins}분 전`;
+  const hrs = Math.floor(mins / 60);
+  if (hrs < 24) return `${hrs}시간 전`;
+  const days = Math.floor(hrs / 24);
+  return `${days}일 전`;
+}
+
+function blockchairLink(addr) {
+  const clean = addr.replace(/\.\.\./g, '');
+  return `https://blockchair.com/bitcoin/address/${addr}`;
+}
+
+let currentSort = { col: null, dir: 'desc' };
+let whaleData = null;
+
+function sortWhales(col) {
+  if (!whaleData) return;
+  
+  if (currentSort.col === col) {
+    currentSort.dir = currentSort.dir === 'desc' ? 'asc' : 'desc';
+  } else {
+    currentSort.col = col;
+    currentSort.dir = 'desc';
+  }
+
+  const keyMap = {
+    'rank': 'balance_usd',
+    'balance': 'balance_btc',
+    'usd': 'balance_usd',
+    '1d': 'change_1d',
+    '7d': 'change_7d',
+    '30d': 'change_30d',
+    'tx': 'tx_count',
+  };
+
+  const key = keyMap[col] || 'balance_usd';
+  const dir = currentSort.dir === 'desc' ? -1 : 1;
+  
+  whaleData.whales.sort((a, b) => {
+    const av = a[key] ?? -Infinity;
+    const bv = b[key] ?? -Infinity;
+    return (av - bv) * dir;
+  });
+
+  renderWhaleTable(whaleData.whales);
+  
+  document.querySelectorAll('thead th').forEach(th => {
+    th.classList.remove('sorted-asc', 'sorted-desc');
+    if (th.dataset.sort === col) {
+      th.classList.add(currentSort.dir === 'asc' ? 'sorted-asc' : 'sorted-desc');
+    }
+  });
+}
+
+function renderWhaleTable(whales) {
+  const tbody = document.getElementById('whale-tbody');
+  if (!tbody) return;
+  
+  tbody.innerHTML = whales.map((w, i) => `
+    <tr>
+      <td class="rank ${i < 3 ? 'rank-top3' : ''}">${i + 1}</td>
+      <td><a class="addr-cell" href="${blockchairLink(w.address)}" target="_blank" title="${w.address}">${shortenAddr(w.address)}</a></td>
+      <td>
+        <div class="balance-btc mono">${formatBTC(w.balance_btc)}</div>
+        <div class="balance-usd">${formatUSD(w.balance_usd)}</div>
+      </td>
+      <td><span class="tier-badge ${tierClass(w.tier)}">${w.tier}</span></td>
+      <td class="mono">${formatChange(w.change_1d)}</td>
+      <td class="mono">${formatChange(w.change_7d)}</td>
+      <td class="mono">${formatChange(w.change_30d)}</td>
+      <td class="mono" style="color:var(--text-secondary)">${formatNumber(w.tx_count)}</td>
+    </tr>
+  `).join('');
+}
+
+function render(data) {
+  whaleData = data;
+  const app = document.getElementById('app');
+  const loading = document.getElementById('loading');
+  
+  const sentimentCls = data.sentiment.direction === 'accumulating' ? 'acc' 
+    : data.sentiment.direction === 'distributing' ? 'dist' : 'neutral';
+  const sentimentText = data.sentiment.direction === 'accumulating' ? '🟢 매집 중' 
+    : data.sentiment.direction === 'distributing' ? '🔴 분배 중' : '⚪ 중립';
+  const sentimentArrow = data.sentiment.direction === 'accumulating' ? '↑' 
+    : data.sentiment.direction === 'distributing' ? '↓' : '→';
+
+  loading.style.display = 'none';
+
+  const html = `
+    <!-- Header -->
+    <div class="header">
+      <div class="header-left">
+        <div class="btc-icon">₿</div>
+        <div>
+          <h1>BTC 고래 추적기</h1>
+          <div class="update-badge">실시간 • CEX ${data.cex_excluded}개 제외</div>
+        </div>
+      </div>
+      <div class="header-meta">
+        <div class="price mono">₿ ${formatNumber(data.btc_price, 0)} USD</div>
+        <div class="update-badge">${timeSince(data.updated_at)} 업데이트</div>
+      </div>
+    </div>
+
+    <!-- Disclaimer -->
+    <div class="disclaimer">
+      ⚠️ 이 데이터는 Blockchair API를 통해 수집됩니다. CEX 필터링은 알려진 주소 목록 기반이며 완벽하지 않을 수 있습니다. 투자 조언이 아닙니다.
+    </div>
+
+    <!-- Tier Cards -->
+    <div class="tier-grid">
+      ${data.tiers.map(t => {
+        const cls = t.name === '$100M+' ? 'mega' : t.name === '$50M-100M' ? 'large' : 'mid';
+        return `
+        <div class="tier-card ${cls}">
+          <div class="tier-label">${t.name}</div>
+          <div class="tier-count">${t.count}</div>
+          <div class="tier-detail">
+            <span class="tier-btc mono">${formatBTC(t.total_btc)}</span><br>
+            ${formatUSD(t.total_usd)}
+          </div>
+        </div>`;
+      }).join('')}
+    </div>
+
+    <!-- Sentiment Bar -->
+    <div class="sentiment-bar">
+      <div>
+        <div class="sentiment-label">24시간 고래 동향</div>
+        <div class="sentiment-value ${sentimentCls}">
+          <span class="sentiment-arrow">${sentimentArrow}</span>
+          ${sentimentText}
+        </div>
+      </div>
+      <div class="sentiment-detail">
+        순변화: <span class="mono" style="color:${data.sentiment.net_change_btc_1d >= 0 ? 'var(--accent-green)' : 'var(--accent-red)'}">
+          ${data.sentiment.net_change_btc_1d >= 0 ? '+' : ''}${formatBTC(data.sentiment.net_change_btc_1d)}
+        </span><br>
+        <span class="mono">${formatUSD(Math.abs(data.sentiment.net_change_usd_1d))}</span> • ${data.sentiment.whales_tracked}개 지갑 추적
+      </div>
+    </div>
+
+    <!-- Tabs -->
+    <div class="section-tabs">
+      <button class="tab-btn active" onclick="switchTab('whales', this)">🐋 고래 목록 (${data.total_whales})</button>
+      <button class="tab-btn" onclick="switchTab('transfers', this)">💸 대형 이체 (${data.large_transfers.length})</button>
+    </div>
+
+    <!-- Whale Table -->
+    <div class="tab-panel active" id="panel-whales">
+      <div class="table-wrapper">
+        <table>
+          <thead>
+            <tr>
+              <th data-sort="rank" onclick="sortWhales('rank')">#</th>
+              <th>주소</th>
+              <th data-sort="balance" onclick="sortWhales('balance')">잔액</th>
+              <th>등급</th>
+              <th data-sort="1d" onclick="sortWhales('1d')">1일</th>
+              <th data-sort="7d" onclick="sortWhales('7d')">7일</th>
+              <th data-sort="30d" onclick="sortWhales('30d')">30일</th>
+              <th data-sort="tx" onclick="sortWhales('tx')">TX</th>
+            </tr>
+          </thead>
+          <tbody id="whale-tbody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Transfers -->
+    <div class="tab-panel" id="panel-transfers">
+      <div class="transfer-list">
+        ${data.large_transfers.map(t => `
+          <div class="transfer-item">
+            <div class="transfer-dir ${t.direction}">
+              ${t.direction === 'in' ? '↓' : '↑'}
+            </div>
+            <div class="transfer-info">
+              <a class="transfer-addr" href="${blockchairLink(t.address)}" target="_blank">${shortenAddr(t.address)}</a>
+              <div class="transfer-time">${timeSince(t.time)} • ${t.tx_hash ? shortenAddr(t.tx_hash) : ''}</div>
+            </div>
+            <div class="transfer-amount">
+              <div class="transfer-btc mono ${t.direction}">${t.direction === 'in' ? '+' : '-'}${formatBTC(Math.abs(t.value_btc))}</div>
+              <div class="transfer-usd">${formatUSD(t.value_usd)}</div>
+            </div>
+          </div>
+        `).join('')}
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <span>데이터: Blockchair API (무료) • 매일 07:00 KST 업데이트</span>
+      <span>CEX 필터링: ${data.cex_excluded}개 알려진 거래소 주소 제외</span>
+    </div>
+  `;
+
+  app.innerHTML = html;
+  renderWhaleTable(data.whales);
+}
+
+function switchTab(tab, btn) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('panel-' + tab).classList.add('active');
+  btn.classList.add('active');
+}
+
+// Load data
+fetch(DATA_URL)
+  .then(r => r.json())
+  .then(data => render(data))
+  .catch(err => {
+    console.error('Failed to load data:', err);
+    document.getElementById('loading').innerHTML = `
+      <div style="color: var(--accent-red);">데이터 로딩 실패</div>
+      <div style="margin-top:8px;font-size:12px;">${err.message}</div>
+    `;
+  });
+</script>
+
+</body>
+</html>
