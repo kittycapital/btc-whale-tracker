@@ -1,22 +1,22 @@
 """
-BTC Whale Tracker - Blockchair API Fetcher
-Fetches top BTC addresses, filters out known CEX wallets,
-and generates JSON data for the dashboard.
-Free tier: 1,440 calls/day (no API key needed)
+BTC Whale Tracker - Bitinfocharts Rich List Scraper
+Scrapes top BTC addresses from bitinfocharts.com (free, no API key)
++ CoinGecko for BTC price
+Runs daily via GitHub Actions at 7AM KST
 """
 
 import json
 import os
+import re
 import sys
 import time
 from datetime import datetime, timezone
 from urllib.request import urlopen, Request
 from urllib.error import HTTPError, URLError
 
+
 # ============================================================
 # KNOWN CEX & CUSTODIAL ADDRESSES TO EXCLUDE
-# Sources: public documentation, blockchain explorers, Arkham
-# Update this list periodically
 # ============================================================
 CEX_ADDRESSES = {
     # Binance
@@ -33,7 +33,6 @@ CEX_ADDRESSES = {
     "bc1ql49ydapnjafl5t2cp9zqpjwe6pdgmxy98859v2",
     # Bitfinex
     "bc1qgdjqv0av3q56jvd82tkdjpy7gdp9ut8tlqmgrpmv24sq90ecnvqqjwvw97",
-    "3JZq4atUahhuA9rLhXLMhhTo133J9rF97j",
     "1Kr6QSydW9bFQG1mXiPNNu6WpJGmUa9i1g",
     # Coinbase
     "3FHNBLobJnbCTFTVakh5TXmEneyf5PT61B",
@@ -53,7 +52,7 @@ CEX_ADDRESSES = {
     # Bitstamp
     "3P3QsMVK89JBNqZQv5zMAKG8FK3kJM4rjt",
     "3BitnP5v17WpVKSUoseFqEjGQCETv6rkRk",
-    # OKX (OKEx)
+    # OKX
     "1FzWLkAahHooV3kzTgyx6qsXoRDrBYBMU4",
     "1Lhurpe3VYtfWZmVFLTwGjz7u3dSCnYiir",
     # Huobi / HTX
@@ -67,11 +66,11 @@ CEX_ADDRESSES = {
     # Robinhood
     "3EmUH8Uh9EXE7axgyAeBsCc2vdUdKkDqWK",
     "bc1qr35hws365juz5rtlsjtvmlu578guf5zy5kf5v3",
-    # Mt.Gox / Trustee
+    # Mt.Gox Trustee
     "17A16QmavnUfCW11DAApiJxp7ARnxN5pGX",
     "1AsHPP7WcGRsBkYLpSv7HAEjFnBBjPFkv1",
     "1HeHLv7ZRFxWUVjuWkWT2gECuLYBs2HPKD",
-    # US Government / Seized
+    # US Government Seized
     "bc1qa5wkgaew2dkv56kc6hp24cc2nidak9namkqree",
     # Grayscale GBTC
     "3Cbq7aT1tY8kMxWLbitaG7yT6bPbKChq64",
@@ -80,110 +79,171 @@ CEX_ADDRESSES = {
     "3BtZ3VN4GTPieFHDyqAJjhNpYqxa5qDiAA",
     # Tether Treasury
     "1NTMakcgVwQpMdGxRQnFKCNDZQFRkqqvJ1",
-    # MicroStrategy (not CEX but institutional - keep or remove based on preference)
-    # Uncomment below to exclude MicroStrategy
-    # "bc1qazcm763858nkj2dz7g20jud8kczq7ycx9fue3q",
-    # "1P5ZEDWTKTFGxQjZphgWPQUpe554WKDfHQ",
+    # Upbit (Mr. 100)
+    "3FaBxEFBpSLCzFGCPQFyQEfwGMRyjoZGAT",
 }
 
-BLOCKCHAIR_BASE = "https://api.blockchair.com"
+# Known CEX labels from Bitinfocharts (partial match in label text)
+CEX_LABELS = [
+    "binance", "coinbase", "bitfinex", "kraken", "gemini",
+    "bitstamp", "okex", "okx", "huobi", "htx", "bybit",
+    "crypto.com", "robinhood", "upbit", "bithumb", "bitflyer",
+    "kucoin", "gate.io", "mexc", "bitget", "deribit",
+    "bittrex", "poloniex", "luno", "blockchain.com",
+]
 
 
-def api_call(endpoint, params=None):
-    """Make a Blockchair API call with basic error handling and rate limiting."""
-    url = f"{BLOCKCHAIR_BASE}{endpoint}"
-    if params:
-        param_str = "&".join(f"{k}={v}" for k, v in params.items())
-        url = f"{url}?{param_str}"
+def http_get(url, retries=3):
+    """HTTP GET with retries and User-Agent."""
+    headers = {
+        "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+        "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+        "Accept-Language": "en-US,en;q=0.5",
+    }
+    req = Request(url, headers=headers)
 
-    print(f"  API call: {url}")
-    req = Request(url, headers={"User-Agent": "BTC-Whale-Tracker/1.0"})
-
-    for attempt in range(3):
+    for attempt in range(retries):
         try:
             with urlopen(req, timeout=30) as resp:
-                data = json.loads(resp.read().decode())
-                if data.get("context", {}).get("code") == 200:
-                    return data
-                else:
-                    print(f"  API error code: {data.get('context', {}).get('code')}")
-                    return None
-        except HTTPError as e:
-            if e.code == 402:
-                print("  Rate limit hit. Waiting 60s...")
-                time.sleep(60)
-            elif e.code == 429:
-                print("  IP temporarily blocked. Waiting 120s...")
-                time.sleep(120)
-            else:
-                print(f"  HTTP Error {e.code}: {e.reason}")
-                if attempt < 2:
-                    time.sleep(5)
-        except URLError as e:
-            print(f"  URL Error: {e.reason}")
-            if attempt < 2:
-                time.sleep(5)
+                return resp.read().decode("utf-8", errors="replace")
+        except (HTTPError, URLError) as e:
+            print(f"  HTTP error on attempt {attempt+1}: {e}")
+            if attempt < retries - 1:
+                time.sleep(3 * (attempt + 1))
         except Exception as e:
-            print(f"  Error: {e}")
-            if attempt < 2:
-                time.sleep(5)
-
+            print(f"  Error on attempt {attempt+1}: {e}")
+            if attempt < retries - 1:
+                time.sleep(3 * (attempt + 1))
     return None
 
 
 def fetch_btc_price():
-    """Get current BTC price from Blockchair stats."""
-    print("Fetching BTC price...")
-    data = api_call("/bitcoin/stats")
-    if data and "data" in data:
-        price = data["data"].get("market_price_usd", 0)
-        print(f"  BTC price: ${price:,.2f}")
-        return price
+    """Get BTC price from CoinGecko (free, no key)."""
+    print("Fetching BTC price from CoinGecko...")
+    url = "https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd"
+    try:
+        req = Request(url, headers={"User-Agent": "BTC-Whale-Tracker/1.0"})
+        with urlopen(req, timeout=15) as resp:
+            data = json.loads(resp.read().decode())
+            price = data.get("bitcoin", {}).get("usd", 0)
+            print(f"  BTC price: ${price:,.2f}")
+            return price
+    except Exception as e:
+        print(f"  CoinGecko error: {e}")
     return 0
 
 
-def fetch_top_addresses(limit=200):
-    """Fetch top BTC addresses by balance."""
-    print(f"Fetching top {limit} BTC addresses...")
-    data = api_call("/bitcoin/addresses", {
-        "s": "balance(desc)",
-        "limit": str(limit),
-    })
+def parse_rich_list_page(html_content):
+    """Parse Bitinfocharts rich list HTML to extract address data."""
+    addresses = []
 
-    if data and "data" in data:
-        addresses = data["data"]
-        print(f"  Retrieved {len(addresses)} addresses")
-        return addresses
-    return []
+    # Find table rows
+    rows = re.findall(r'<tr[^>]*>(.*?)</tr>', html_content, re.DOTALL)
 
+    for row in rows:
+        # Extract address from link to /bitcoin/address/
+        addr_match = re.search(
+            r'/bitcoin/address/([13bc][a-zA-Z0-9]{25,62})',
+            row
+        )
+        if not addr_match:
+            continue
 
-def fetch_address_details(address):
-    """Fetch detailed info for a specific address (recent transactions)."""
-    print(f"  Fetching details for {address[:16]}...")
-    data = api_call(f"/bitcoin/dashboards/address/{address}", {
-        "limit": "5",
-        "transaction_details": "true",
-    })
-    time.sleep(2.5)  # Rate limit: stay well under 30/min
+        address = addr_match.group(1).strip()
 
-    if data and "data" in data:
-        addr_data = data["data"].get(address, {})
-        return addr_data
-    return None
+        # Extract all cell contents
+        cells = re.findall(r'<td[^>]*>(.*?)</td>', row, re.DOTALL)
 
+        # Extract balance - look for BTC amount
+        balance_btc = 0.0
+        for cell in cells:
+            btc_match = re.search(r'([\d,]+\.?\d*)\s*BTC', cell)
+            if btc_match:
+                try:
+                    balance_btc = float(btc_match.group(1).replace(",", ""))
+                    break
+                except ValueError:
+                    continue
 
-def filter_cex_addresses(addresses):
-    """Remove known CEX/custodial addresses."""
-    filtered = []
-    removed = 0
-    for addr in addresses:
-        if addr.get("address") not in CEX_ADDRESSES:
-            filtered.append(addr)
+        if balance_btc <= 0:
+            continue
+
+        # Extract label/owner tag
+        label = ""
+        # Check for wallet: tag or small text label
+        label_match = re.search(r'wallet:\s*([^<"]+)', row)
+        if label_match:
+            label = label_match.group(1).strip()
         else:
-            removed += 1
-            print(f"  Excluded CEX: {addr['address'][:20]}... ({addr.get('balance', 0) / 1e8:.2f} BTC)")
-    print(f"  Filtered: {removed} CEX addresses removed, {len(filtered)} remaining")
-    return filtered
+            label_match = re.search(r'<small[^>]*>\s*(?:<a[^>]*>)?\s*([^<]+)', row)
+            if label_match:
+                lbl = label_match.group(1).strip()
+                if lbl and len(lbl) > 1 and lbl not in ("...", "address"):
+                    label = lbl
+
+        # Extract ins/outs count from cells
+        tx_count = 0
+        for cell in cells:
+            # Look for plain numbers that could be tx counts
+            num_match = re.search(r'^\s*([\d,]+)\s*$', cell.strip())
+            if num_match:
+                try:
+                    val = int(num_match.group(1).replace(",", ""))
+                    if val > tx_count:
+                        tx_count = val
+                except ValueError:
+                    pass
+
+        addresses.append({
+            "address": address,
+            "balance_btc": balance_btc,
+            "label": label,
+            "tx_count": tx_count,
+        })
+
+    return addresses
+
+
+def scrape_rich_list():
+    """Scrape top 200 BTC addresses from Bitinfocharts."""
+    all_addresses = []
+
+    # Page 1: top 1-100
+    print("Scraping Bitinfocharts page 1 (top 1-100)...")
+    html1 = http_get("https://bitinfocharts.com/top-100-richest-bitcoin-addresses.html")
+    if html1:
+        addrs1 = parse_rich_list_page(html1)
+        print(f"  Parsed {len(addrs1)} addresses from page 1")
+        all_addresses.extend(addrs1)
+    else:
+        print("  ERROR: Failed to fetch page 1")
+        return []
+
+    time.sleep(3)
+
+    # Page 2: top 101-200
+    print("Scraping Bitinfocharts page 2 (top 101-200)...")
+    html2 = http_get("https://bitinfocharts.com/top-100-richest-bitcoin-addresses-2.html")
+    if html2:
+        addrs2 = parse_rich_list_page(html2)
+        print(f"  Parsed {len(addrs2)} addresses from page 2")
+        all_addresses.extend(addrs2)
+    else:
+        print("  WARNING: Failed to fetch page 2, continuing with page 1 only")
+
+    return all_addresses
+
+
+def is_cex_address(address, label):
+    """Check if address belongs to a known CEX."""
+    if address in CEX_ADDRESSES:
+        return True
+    if label:
+        label_lower = label.lower()
+        for cex in CEX_LABELS:
+            if cex in label_lower:
+                return True
+    return False
 
 
 def classify_tier(balance_usd):
@@ -199,7 +259,7 @@ def classify_tier(balance_usd):
 
 
 def load_previous_snapshot(filepath):
-    """Load previous snapshot for balance change calculation."""
+    """Load previous snapshot."""
     if os.path.exists(filepath):
         try:
             with open(filepath, "r") as f:
@@ -214,20 +274,19 @@ def calculate_changes(current_whales, snapshots_dir):
     changes = {}
     now = datetime.now(timezone.utc)
 
-    # Find snapshots for 1d, 7d, 30d ago
     for period, days in [("1d", 1), ("7d", 7), ("30d", 30)]:
-        # Look for snapshot closest to target date
         target_files = []
-        for f in os.listdir(snapshots_dir) if os.path.exists(snapshots_dir) else []:
-            if f.startswith("snapshot_") and f.endswith(".json"):
-                try:
-                    date_str = f.replace("snapshot_", "").replace(".json", "")
-                    file_date = datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
-                    diff = abs((now - file_date).days - days)
-                    if diff <= 1:  # Within 1 day tolerance
-                        target_files.append((diff, f))
-                except ValueError:
-                    continue
+        if os.path.exists(snapshots_dir):
+            for f in os.listdir(snapshots_dir):
+                if f.startswith("snapshot_") and f.endswith(".json"):
+                    try:
+                        date_str = f.replace("snapshot_", "").replace(".json", "")
+                        file_date = datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
+                        diff = abs((now - file_date).days - days)
+                        if diff <= 1:
+                            target_files.append((diff, f))
+                    except ValueError:
+                        continue
 
         if target_files:
             target_files.sort()
@@ -241,61 +300,71 @@ def calculate_changes(current_whales, snapshots_dir):
                         changes[addr] = {}
                     old_bal = old_balances.get(addr)
                     if old_bal is not None:
-                        changes[addr][period] = whale["balance_btc"] - old_bal
+                        changes[addr][period] = round(whale["balance_btc"] - old_bal, 8)
                     else:
-                        changes[addr][period] = None  # New whale, no prior data
+                        changes[addr][period] = None
 
     return changes
 
 
 def main():
     print("=" * 60)
-    print("BTC Whale Tracker - Blockchair Fetcher")
+    print("BTC Whale Tracker - Bitinfocharts Scraper")
     print(f"Time: {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M:%S UTC')}")
     print("=" * 60)
 
-    # Directories
     data_dir = os.environ.get("DATA_DIR", "data")
     snapshots_dir = os.path.join(data_dir, "snapshots")
     os.makedirs(snapshots_dir, exist_ok=True)
 
-    # Step 1: Get BTC price
+    # Step 1: BTC price
     btc_price = fetch_btc_price()
     if btc_price == 0:
         print("ERROR: Could not fetch BTC price. Aborting.")
         sys.exit(1)
 
-    # Step 2: Fetch top addresses
-    raw_addresses = fetch_top_addresses(200)
+    # Step 2: Scrape rich list
+    raw_addresses = scrape_rich_list()
     if not raw_addresses:
-        print("ERROR: Could not fetch addresses. Aborting.")
+        print("ERROR: Could not scrape rich list. Aborting.")
         sys.exit(1)
 
-    # Step 3: Filter CEX addresses
-    filtered = filter_cex_addresses(raw_addresses)
+    print(f"\nTotal addresses scraped: {len(raw_addresses)}")
 
-    # Step 4: Build whale list with USD values
+    # Step 3: Filter CEX
+    filtered = []
+    cex_removed = 0
+    for addr in raw_addresses:
+        if is_cex_address(addr["address"], addr.get("label", "")):
+            cex_removed += 1
+            print(f"  Excluded CEX: {addr['address'][:24]}... [{addr.get('label', '')}] ({addr['balance_btc']:,.2f} BTC)")
+        else:
+            filtered.append(addr)
+
+    print(f"  Filtered: {cex_removed} CEX removed, {len(filtered)} remaining")
+
+    # Step 4: Build whale list
     whales = []
     for addr in filtered:
-        balance_btc = addr.get("balance", 0) / 1e8  # satoshi to BTC
-        balance_usd = balance_btc * btc_price
-        if balance_usd >= 10_000_000:  # $10M threshold
+        balance_usd = addr["balance_btc"] * btc_price
+        if balance_usd >= 10_000_000:
             whales.append({
-                "address": addr.get("address", ""),
-                "balance_btc": round(balance_btc, 8),
+                "address": addr["address"],
+                "balance_btc": round(addr["balance_btc"], 8),
                 "balance_usd": round(balance_usd, 2),
                 "tier": classify_tier(balance_usd),
-                "tx_count": addr.get("transaction_count", 0),
-                "first_seen": addr.get("first_seen_receiving", ""),
-                "last_seen": addr.get("last_seen_receiving", ""),
+                "tx_count": addr.get("tx_count", 0),
+                "label": addr.get("label", ""),
+                "change_1d": None,
+                "change_7d": None,
+                "change_30d": None,
             })
 
     whales.sort(key=lambda x: x["balance_usd"], reverse=True)
-    top_whales = whales[:100]  # Top 100
-
+    top_whales = whales[:100]
     print(f"\nFound {len(top_whales)} whales above $10M threshold")
 
-    # Step 5: Calculate balance changes from snapshots
+    # Step 5: Balance changes
     changes = calculate_changes(top_whales, snapshots_dir)
     for whale in top_whales:
         addr = whale["address"]
@@ -320,30 +389,7 @@ def main():
             "total_usd": round(tier_totals.get(tier_name, 0) * btc_price, 2),
         })
 
-    # Step 7: Fetch transaction details for top 20 whales
-    print("\nFetching recent transactions for top 20 whales...")
-    large_transfers = []
-    for whale in top_whales[:20]:
-        details = fetch_address_details(whale["address"])
-        if details and "transactions" in details:
-            for tx in details.get("transactions", [])[:3]:
-                if isinstance(tx, dict):
-                    value_btc = tx.get("balance_change", 0) / 1e8
-                    value_usd = abs(value_btc) * btc_price
-                    if value_usd >= 1_000_000:  # Only transfers > $1M
-                        large_transfers.append({
-                            "address": whale["address"],
-                            "tx_hash": tx.get("hash", ""),
-                            "value_btc": round(value_btc, 8),
-                            "value_usd": round(value_usd, 2),
-                            "direction": "in" if value_btc > 0 else "out",
-                            "time": tx.get("time", ""),
-                        })
-
-    large_transfers.sort(key=lambda x: abs(x["value_usd"]), reverse=True)
-    large_transfers = large_transfers[:30]  # Top 30 transfers
-
-    # Step 8: Accumulation/Distribution metric
+    # Step 7: Sentiment
     net_change_btc = 0
     counted = 0
     for whale in top_whales:
@@ -353,7 +399,7 @@ def main():
 
     sentiment = "accumulating" if net_change_btc > 0 else "distributing" if net_change_btc < 0 else "neutral"
 
-    # Step 9: Build output JSON
+    # Step 8: Output JSON
     output = {
         "updated_at": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
         "btc_price": btc_price,
@@ -366,17 +412,17 @@ def main():
             "whales_tracked": counted,
         },
         "whales": top_whales,
-        "large_transfers": large_transfers,
-        "cex_excluded": len(CEX_ADDRESSES),
+        "large_transfers": [],
+        "cex_excluded": cex_removed,
+        "source": "bitinfocharts.com",
     }
 
-    # Save main data file
     output_path = os.path.join(data_dir, "whales.json")
     with open(output_path, "w") as f:
         json.dump(output, f, indent=2)
     print(f"\nSaved whale data to {output_path}")
 
-    # Save daily snapshot for historical tracking
+    # Save snapshot
     today = datetime.now(timezone.utc).strftime("%Y-%m-%d")
     snapshot_path = os.path.join(snapshots_dir, f"snapshot_{today}.json")
     snapshot = {
@@ -388,7 +434,7 @@ def main():
         json.dump(snapshot, f)
     print(f"Saved snapshot to {snapshot_path}")
 
-    # Cleanup old snapshots (keep 60 days)
+    # Cleanup old snapshots (60 days)
     if os.path.exists(snapshots_dir):
         for fname in os.listdir(snapshots_dir):
             if fname.startswith("snapshot_") and fname.endswith(".json"):
@@ -397,13 +443,12 @@ def main():
                     file_date = datetime.strptime(date_str, "%Y-%m-%d").replace(tzinfo=timezone.utc)
                     if (datetime.now(timezone.utc) - file_date).days > 60:
                         os.remove(os.path.join(snapshots_dir, fname))
-                        print(f"  Cleaned up old snapshot: {fname}")
                 except ValueError:
                     continue
 
     print("\n✅ Done!")
     print(f"  Whales: {len(top_whales)}")
-    print(f"  Large transfers: {len(large_transfers)}")
+    print(f"  CEX filtered: {cex_removed}")
     print(f"  Tiers: {json.dumps(tier_counts)}")
 
 
