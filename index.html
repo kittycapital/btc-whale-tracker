@@ -669,7 +669,10 @@ function renderWhaleTable(whales) {
   tbody.innerHTML = whales.map((w, i) => `
     <tr>
       <td class="rank ${i < 3 ? 'rank-top3' : ''}">${i + 1}</td>
-      <td><a class="addr-cell" href="${blockchairLink(w.address)}" target="_blank" title="${w.address}">${shortenAddr(w.address)}</a></td>
+      <td>
+        <a class="addr-cell" href="${blockchairLink(w.address)}" target="_blank" title="${w.address}">${shortenAddr(w.address)}</a>
+        ${w.label ? `<div style="font-size:10px;color:var(--text-dim);margin-top:2px;">${w.label}</div>` : ''}
+      </td>
       <td>
         <div class="balance-btc mono">${formatBTC(w.balance_btc)}</div>
         <div class="balance-usd">${formatUSD(w.balance_usd)}</div>
@@ -715,7 +718,7 @@ function render(data) {
 
     <!-- Disclaimer -->
     <div class="disclaimer">
-      ⚠️ 이 데이터는 Blockchair API를 통해 수집됩니다. CEX 필터링은 알려진 주소 목록 기반이며 완벽하지 않을 수 있습니다. 투자 조언이 아닙니다.
+      ⚠️ 이 데이터는 Bitinfocharts.com에서 수집됩니다. CEX 필터링은 알려진 주소 및 라벨 기반이며 완벽하지 않을 수 있습니다. 투자 조언이 아닙니다.
     </div>
 
     <!-- Tier Cards -->
@@ -780,6 +783,7 @@ function render(data) {
 
     <!-- Transfers -->
     <div class="tab-panel" id="panel-transfers">
+      ${data.large_transfers.length > 0 ? `
       <div class="transfer-list">
         ${data.large_transfers.map(t => `
           <div class="transfer-item">
@@ -797,11 +801,18 @@ function render(data) {
           </div>
         `).join('')}
       </div>
+      ` : `
+      <div style="text-align:center;padding:40px 20px;color:var(--text-dim);">
+        <div style="font-size:32px;margin-bottom:12px;">🔜</div>
+        <div style="font-size:14px;">대형 이체 데이터는 준비 중입니다</div>
+        <div style="font-size:12px;margin-top:6px;">스냅샷이 쌓이면 잔액 변화 기반으로 이체를 추적합니다</div>
+      </div>
+      `}
     </div>
 
     <!-- Footer -->
     <div class="footer">
-      <span>데이터: Blockchair API (무료) • 매일 07:00 KST 업데이트</span>
+      <span>데이터: Bitinfocharts + CoinGecko (무료) • 매일 07:00 KST 업데이트</span>
       <span>CEX 필터링: ${data.cex_excluded}개 알려진 거래소 주소 제외</span>
     </div>
   `;
