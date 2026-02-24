@@ -1,13 +1,13 @@
 {
-  "updated_at": "2026-02-23T22:48:57Z",
-  "btc_price": 64820,
+  "updated_at": "2026-02-24T22:38:56Z",
+  "btc_price": 64149,
   "total_whales": 100,
   "tiers": [
     {
       "name": "$100M+",
       "count": 100,
-      "total_btc": 1693878.0,
-      "total_usd": 109797171960.0
+      "total_btc": 1666083.0,
+      "total_usd": 106877558367.0
     },
     {
       "name": "$50M-100M",
@@ -24,15 +24,15 @@
   ],
   "sentiment": {
     "direction": "accumulating",
-    "net_change_btc_1d": 447.0,
-    "net_change_usd_1d": 28974540.0,
-    "whales_tracked": 100
+    "net_change_btc_1d": 223.0,
+    "net_change_usd_1d": 14305227.0,
+    "whales_tracked": 97
   },
   "whales": [
     {
       "address": "bc1qjasf9z3h7w3jspkhtgatgpyvvzgpa2wwd2lr0eh5tx44reyn2k7sfc27a4",
       "balance_btc": 96185.0,
-      "balance_usd": 6234711700.0,
+      "balance_usd": 6170171565.0,
       "tier": "$100M+",
       "tx_count": 164,
       "label": "Tether",
@@ -43,7 +43,7 @@
     {
       "address": "bc1qd4ysezhmypwty5dnw7c8nqy5h5nxg0xqsvaefd0qn5kq32vwnwqqgv4rzr",
       "balance_btc": 91850.0,
-      "balance_usd": 5953717000.0,
+      "balance_usd": 5892085650.0,
       "tier": "$100M+",
       "tx_count": 183,
       "label": "",
@@ -54,7 +54,7 @@
     {
       "address": "1FeexV6bAHb8ybZjqQMjJrcCrHGW9sb6uF",
       "balance_btc": 79957.0,
-      "balance_usd": 5182812740.0,
+      "balance_usd": 5129161593.0,
       "tier": "$100M+",
       "tx_count": 672,
       "label": "MtGox-Hack",
@@ -65,7 +65,7 @@
     {
       "address": "bc1q8yj0herd4r4yxszw3nkfvt53433thk0f5qst4g",
       "balance_btc": 78317.0,
-      "balance_usd": 5076507940.0,
+      "balance_usd": 5023957233.0,
       "tier": "$100M+",
       "tx_count": 73,
       "label": "",
@@ -76,7 +76,7 @@
     {
       "address": "bc1qa5wkgaew2dkv56kfvj49j0av5nml45x9ek9hz6",
       "balance_btc": 69370.0,
-      "balance_usd": 4496563400.0,
+      "balance_usd": 4450016130.0,
       "tier": "$100M+",
       "tx_count": 156,
       "label": "SilkRoad-FBI-Confiscated",
@@ -87,7 +87,7 @@
     {
       "address": "1LdRcdxfbSnmCYYNdeYpUnztiYzVfBEQeC",
       "balance_btc": 53880.0,
-      "balance_usd": 3492501600.0,
+      "balance_usd": 3456348120.0,
       "tier": "$100M+",
       "tx_count": 243,
       "label": "",
@@ -98,7 +98,7 @@
     {
       "address": "1AC4fMwgY8j9onSbXEWeH6Zan8QGMSdmtA",
       "balance_btc": 51830.0,
-      "balance_usd": 3359620600.0,
+      "balance_usd": 3324842670.0,
       "tier": "$100M+",
       "tx_count": 159,
       "label": "",
@@ -109,7 +109,7 @@
     {
       "address": "bc1qa2eu6p5rl9255e3xz7fcgm6snn4wl5kdfh7zpt05qp5fad9dmsys0qjg0e",
       "balance_btc": 44194.0,
-      "balance_usd": 2864655080.0,
+      "balance_usd": 2835000906.0,
       "tier": "$100M+",
       "tx_count": 68,
       "label": "",
@@ -120,7 +120,7 @@
     {
       "address": "1LruNZjwamWJXThX2Y8C2d47QqhAkkc5os",
       "balance_btc": 44000.0,
-      "balance_usd": 2852080000.0,
+      "balance_usd": 2822556000.0,
       "tier": "$100M+",
       "tx_count": 102,
       "label": "",
@@ -131,7 +131,7 @@
     {
       "address": "bc1q7ydrtdn8z62xhslqyqtyt38mm4e2c4h3mxjkug",
       "balance_btc": 36000.0,
-      "balance_usd": 2333520000.0,
+      "balance_usd": 2309364000.0,
       "tier": "$100M+",
       "tx_count": 79,
       "label": "UK-Gov-Confiscated",
@@ -142,7 +142,7 @@
     {
       "address": "bc1qy3uw2kk45uj9vsy52rjfhydm2tnd6hreu8vha3",
       "balance_btc": 31484.0,
-      "balance_usd": 2040792880.0,
+      "balance_usd": 2019667116.0,
       "tier": "$100M+",
       "tx_count": 32,
       "label": "",
@@ -153,7 +153,7 @@
     {
       "address": "12ib7dApVFvg82TXKycWBNpN8kFyiAN1dr",
       "balance_btc": 31000.0,
-      "balance_usd": 2009420000.0,
+      "balance_usd": 1988619000.0,
       "tier": "$100M+",
       "tx_count": 246,
       "label": "967",
@@ -164,7 +164,7 @@
     {
       "address": "bc1q6h2v33qt0jjvpr2hxxtwhtvdvtn086g0n2qu06",
       "balance_btc": 30982.0,
-      "balance_usd": 2008253240.0,
+      "balance_usd": 1987464318.0,
       "tier": "$100M+",
       "tx_count": 28,
       "label": "",
@@ -175,7 +175,7 @@
     {
       "address": "bc1q8taf2eca7pn9wu4czt8fgftqm288xtfxdyt33syzxuexxty733xsszghzk",
       "balance_btc": 30800.0,
-      "balance_usd": 1996456000.0,
+      "balance_usd": 1975789200.0,
       "tier": "$100M+",
       "tx_count": 29,
       "label": "",
@@ -184,20 +184,9 @@
       "change_30d": null
     },
     {
-      "address": "bc1qukw69mjxwp30adfqddv6gcyva26laxz562rhlk",
-      "balance_btc": 28561.0,
-      "balance_usd": 1851324020.0,
-      "tier": "$100M+",
-      "tx_count": 31,
-      "label": "",
-      "change_1d": 0.0,
-      "change_7d": 0.0,
-      "change_30d": null
-    },
-    {
       "address": "12tkqA9xSoowkzoERHMWNKsTey55YEBqkv",
       "balance_btc": 28151.0,
-      "balance_usd": 1824747820.0,
+      "balance_usd": 1805858499.0,
       "tier": "$100M+",
       "tx_count": 209,
       "label": "",
@@ -208,7 +197,7 @@
     {
       "address": "3EMVdMehEq5SFipQ5UfbsfMsH223sSz9A9",
       "balance_btc": 26984.0,
-      "balance_usd": 1749102880.0,
+      "balance_usd": 1730996616.0,
       "tier": "$100M+",
       "tx_count": 111,
       "label": "",
@@ -219,7 +208,7 @@
     {
       "address": "3FsDiWdG76meMpdCLbVV4dUXhrFyaLrtxL",
       "balance_btc": 26916.0,
-      "balance_usd": 1744695120.0,
+      "balance_usd": 1726634484.0,
       "tier": "$100M+",
       "tx_count": 36,
       "label": "",
@@ -230,7 +219,7 @@
     {
       "address": "39eYrpgAgDhp4tTjrSb1ppZ5kdAc1ikBYw",
       "balance_btc": 26062.0,
-      "balance_usd": 1689338840.0,
+      "balance_usd": 1671851238.0,
       "tier": "$100M+",
       "tx_count": 40,
       "label": "",
@@ -241,7 +230,7 @@
     {
       "address": "1N7jWmv63mkMdsYzbNUVHbEYDQfcq1u8Yp",
       "balance_btc": 24052.0,
-      "balance_usd": 1559050640.0,
+      "balance_usd": 1542911748.0,
       "tier": "$100M+",
       "tx_count": 39,
       "label": "",
@@ -252,7 +241,7 @@
     {
       "address": "15cHRgVrGKz7qp2JL2N5mkB2MCFGLcnHxv",
       "balance_btc": 23600.0,
-      "balance_usd": 1529752000.0,
+      "balance_usd": 1513916400.0,
       "tier": "$100M+",
       "tx_count": 80,
       "label": "",
@@ -263,7 +252,7 @@
     {
       "address": "17rm2dvb439dZqyMe2d4D6AQJSgg6yeNRn",
       "balance_btc": 20008.0,
-      "balance_usd": 1296918560.0,
+      "balance_usd": 1283493192.0,
       "tier": "$100M+",
       "tx_count": 115,
       "label": "",
@@ -274,7 +263,7 @@
     {
       "address": "1PeizMg76Cf96nUQrYg8xuoZWLQozU5zGW",
       "balance_btc": 19414.0,
-      "balance_usd": 1258415480.0,
+      "balance_usd": 1245388686.0,
       "tier": "$100M+",
       "tx_count": 148,
       "label": "",
@@ -285,7 +274,7 @@
     {
       "address": "bc1qptc9cz269u2mc5yguun5a5d6yd5c7f7ne4qj26",
       "balance_btc": 16400.0,
-      "balance_usd": 1063048000.0,
+      "balance_usd": 1052043600.0,
       "tier": "$100M+",
       "tx_count": 48,
       "label": "",
@@ -296,7 +285,7 @@
     {
       "address": "38rFtDdFpXc4y6XPbSnNd2UvveEt5Xms2E",
       "balance_btc": 16116.0,
-      "balance_usd": 1044639120.0,
+      "balance_usd": 1033825284.0,
       "tier": "$100M+",
       "tx_count": 50,
       "label": "",
@@ -307,7 +296,7 @@
     {
       "address": "1GR9qNz7zgtaW5HwwVpEJWMnGWhsbsieCG",
       "balance_btc": 15746.0,
-      "balance_usd": 1020655720.0,
+      "balance_usd": 1010090154.0,
       "tier": "$100M+",
       "tx_count": 105,
       "label": "",
@@ -318,7 +307,7 @@
     {
       "address": "1BAuq7Vho2CEkVkUxbfU26LhwQjbCmWQkD",
       "balance_btc": 15000.0,
-      "balance_usd": 972300000.0,
+      "balance_usd": 962235000.0,
       "tier": "$100M+",
       "tx_count": 53,
       "label": "",
@@ -329,7 +318,7 @@
     {
       "address": "bc1q0ymzksy046tv4z88ts5nmu7s574umnwmdev3rt",
       "balance_btc": 14000.0,
-      "balance_usd": 907480000.0,
+      "balance_usd": 898086000.0,
       "tier": "$100M+",
       "tx_count": 30,
       "label": "",
@@ -340,7 +329,7 @@
     {
       "address": "bc1qsg6x2cvm75xuddn5g0ss9zglaamgz90q8vcp8w",
       "balance_btc": 13514.0,
-      "balance_usd": 875977480.0,
+      "balance_usd": 866909586.0,
       "tier": "$100M+",
       "tx_count": 58,
       "label": "",
@@ -351,7 +340,7 @@
     {
       "address": "bc1qvrwzs8unvu35kcred2z5ujjef36s5jgf3y6tp8",
       "balance_btc": 13108.0,
-      "balance_usd": 849660560.0,
+      "balance_usd": 840865092.0,
       "tier": "$100M+",
       "tx_count": 60,
       "label": "",
@@ -362,7 +351,7 @@
     {
       "address": "bc1q4vxn43l44h30nkluqfxd9eckf45vr2awz38lwa",
       "balance_btc": 13003.0,
-      "balance_usd": 842854460.0,
+      "balance_usd": 834129447.0,
       "tier": "$100M+",
       "tx_count": 61,
       "label": "UK-Gov-Confiscated",
@@ -373,7 +362,7 @@
     {
       "address": "bc1pdscqxcegedsmkwda427yzcwvszu0xeannh85jkzxfg4ehll2e9lqexmvgn",
       "balance_btc": 12166.0,
-      "balance_usd": 788600120.0,
+      "balance_usd": 780436734.0,
       "tier": "$100M+",
       "tx_count": 132,
       "label": "",
@@ -384,7 +373,7 @@
     {
       "address": "1F34duy2eeMz5mSrvFepVzy7Y1rBsnAyWC",
       "balance_btc": 10771.0,
-      "balance_usd": 698176220.0,
+      "balance_usd": 690948879.0,
       "tier": "$100M+",
       "tx_count": 126,
       "label": "",
@@ -395,7 +384,7 @@
     {
       "address": "bc1qxlth5har0qasqvattsjvgp80st2x402u5shuud",
       "balance_btc": 10500.0,
-      "balance_usd": 680610000.0,
+      "balance_usd": 673564500.0,
       "tier": "$100M+",
       "tx_count": 70,
       "label": "",
@@ -406,7 +395,7 @@
     {
       "address": "bc1qcpflj68s3ahy4xajez4d8v3vk28pvf7qte2jmlftvxzfke2u6mqsge3gvh",
       "balance_btc": 10435.0,
-      "balance_usd": 676396700.0,
+      "balance_usd": 669394815.0,
       "tier": "$100M+",
       "tx_count": 352,
       "label": "",
@@ -417,7 +406,7 @@
     {
       "address": "1ANkDML9LtVv1E1EF7cwPFEkSv6Bpojwyt",
       "balance_btc": 10423.0,
-      "balance_usd": 675618860.0,
+      "balance_usd": 668625027.0,
       "tier": "$100M+",
       "tx_count": 71,
       "label": "",
@@ -428,7 +417,7 @@
     {
       "address": "bc1p8jkwplu835wtjfuzzj3pwkzydyf98qlvvufyudutvqdlpns04h4qqqhnea",
       "balance_btc": 10077.0,
-      "balance_usd": 653191140.0,
+      "balance_usd": 646429473.0,
       "tier": "$100M+",
       "tx_count": 141,
       "label": "",
@@ -439,7 +428,7 @@
     {
       "address": "bc1qsxdxm0exqdsmnl9ejrz250xqxrxpxkgf5nhhtq",
       "balance_btc": 10002.0,
-      "balance_usd": 648329640.0,
+      "balance_usd": 641618298.0,
       "tier": "$100M+",
       "tx_count": 76,
       "label": "",
@@ -450,7 +439,7 @@
     {
       "address": "1Ki3WTEEqTLPNsN5cGTsMkL2sJ4m5mdCXT",
       "balance_btc": 10000.0,
-      "balance_usd": 648200000.0,
+      "balance_usd": 641490000.0,
       "tier": "$100M+",
       "tx_count": 77,
       "label": "",
@@ -461,7 +450,7 @@
     {
       "address": "1DzsfLRDfbmQM99xm59au2SrTY3YmciBSB",
       "balance_btc": 10000.0,
-      "balance_usd": 648200000.0,
+      "balance_usd": 641490000.0,
       "tier": "$100M+",
       "tx_count": 78,
       "label": "",
@@ -472,7 +461,7 @@
     {
       "address": "1GUfWdZQoo2pQ4BKHsiegxuZPnheY5ueTm",
       "balance_btc": 10000.0,
-      "balance_usd": 648200000.0,
+      "balance_usd": 641490000.0,
       "tier": "$100M+",
       "tx_count": 79,
       "label": "",
@@ -483,7 +472,7 @@
     {
       "address": "12HnxiXEeKUVjQRbMVTytsGWnzHd5LdGCt",
       "balance_btc": 10000.0,
-      "balance_usd": 648200000.0,
+      "balance_usd": 641490000.0,
       "tier": "$100M+",
       "tx_count": 80,
       "label": "",
@@ -494,7 +483,7 @@
     {
       "address": "17uULjz9moeLyjXHoKNwDRgKzf8ahY3Jia",
       "balance_btc": 10000.0,
-      "balance_usd": 648200000.0,
+      "balance_usd": 641490000.0,
       "tier": "$100M+",
       "tx_count": 81,
       "label": "",
@@ -505,7 +494,7 @@
     {
       "address": "18qNs1yBGGKR8RyErnEF5kegbNUgPfixhS",
       "balance_btc": 10000.0,
-      "balance_usd": 648200000.0,
+      "balance_usd": 641490000.0,
       "tier": "$100M+",
       "tx_count": 82,
       "label": "",
@@ -516,7 +505,7 @@
     {
       "address": "1DP3VYwN6ozHXDDaETbvNFLd86CAXfaewi",
       "balance_btc": 10000.0,
-      "balance_usd": 648200000.0,
+      "balance_usd": 641490000.0,
       "tier": "$100M+",
       "tx_count": 83,
       "label": "",
@@ -527,7 +516,7 @@
     {
       "address": "1NhJGUJu8rrTwPS4vopsdTqqcK4nAwdLwJ",
       "balance_btc": 10000.0,
-      "balance_usd": 648200000.0,
+      "balance_usd": 641490000.0,
       "tier": "$100M+",
       "tx_count": 84,
       "label": "",
@@ -538,7 +527,7 @@
     {
       "address": "1MewpRkpcbFdqamPPYc1bXa9AJ189Succy",
       "balance_btc": 10000.0,
-      "balance_usd": 648200000.0,
+      "balance_usd": 641490000.0,
       "tier": "$100M+",
       "tx_count": 85,
       "label": "",
@@ -549,7 +538,7 @@
     {
       "address": "1MtUMTqtdrpT6Rar5fgWoyrzAevatssej5",
       "balance_btc": 10000.0,
-      "balance_usd": 648200000.0,
+      "balance_usd": 641490000.0,
       "tier": "$100M+",
       "tx_count": 86,
       "label": "",
@@ -560,7 +549,7 @@
     {
       "address": "1H2MXWiSniAgg7ykdXEzPHL6oTH1ic4kP",
       "balance_btc": 10000.0,
-      "balance_usd": 648200000.0,
+      "balance_usd": 641490000.0,
       "tier": "$100M+",
       "tx_count": 87,
       "label": "",
@@ -571,7 +560,7 @@
     {
       "address": "bc1qxkhwkn623l5lg4rx9vx8cujmleaga0eg6wc7p6",
       "balance_btc": 9800.0,
-      "balance_usd": 635236000.0,
+      "balance_usd": 628660200.0,
       "tier": "$100M+",
       "tx_count": 90,
       "label": "",
@@ -582,7 +571,7 @@
     {
       "address": "34PhCF947JMQtCn7FD1J3Xd3c2VSxAwda8",
       "balance_btc": 9551.0,
-      "balance_usd": 619095820.0,
+      "balance_usd": 612687099.0,
       "tier": "$100M+",
       "tx_count": 93,
       "label": "",
@@ -593,7 +582,7 @@
     {
       "address": "bc1qd46j77pkp5vdxraf8tw5l6xs36dlygdx2rt9ly",
       "balance_btc": 9500.0,
-      "balance_usd": 615790000.0,
+      "balance_usd": 609415500.0,
       "tier": "$100M+",
       "tx_count": 94,
       "label": "",
@@ -604,7 +593,7 @@
     {
       "address": "1P9fAFAsSLRmMu2P7wZ5CXDPRfLSWTy9N8",
       "balance_btc": 9425.0,
-      "balance_usd": 610928500.0,
+      "balance_usd": 604604325.0,
       "tier": "$100M+",
       "tx_count": 96,
       "label": "",
@@ -615,7 +604,7 @@
     {
       "address": "17MWdxfjPYP2PYhdy885QtihfbW181r1rn",
       "balance_btc": 9343.0,
-      "balance_usd": 605613260.0,
+      "balance_usd": 599344107.0,
       "tier": "$100M+",
       "tx_count": 97,
       "label": "",
@@ -626,7 +615,7 @@
     {
       "address": "1HLvaTs3zR3oev9ya7Pzp3GB9Gqfg6XYJT",
       "balance_btc": 9260.0,
-      "balance_usd": 600233200.0,
+      "balance_usd": 594019740.0,
       "tier": "$100M+",
       "tx_count": 112,
       "label": "",
@@ -637,7 +626,7 @@
     {
       "address": "33eU1zeB2S4x3p4ccSsnAChXcGJgtMrMtZ",
       "balance_btc": 9252.0,
-      "balance_usd": 599714640.0,
+      "balance_usd": 593506548.0,
       "tier": "$100M+",
       "tx_count": 99,
       "label": "82375777",
@@ -648,7 +637,7 @@
     {
       "address": "bc1qukqenm2t85dhdta9glqehllglxznsu4qyxn079",
       "balance_btc": 9112.0,
-      "balance_usd": 590639840.0,
+      "balance_usd": 584525688.0,
       "tier": "$100M+",
       "tx_count": 100,
       "label": "",
@@ -659,7 +648,7 @@
     {
       "address": "bc1qffyax9rrxmqyq8xwjkzrrqwqjp3ppz5a4665f9",
       "balance_btc": 9099.0,
-      "balance_usd": 589797180.0,
+      "balance_usd": 583691751.0,
       "tier": "$100M+",
       "tx_count": 101,
       "label": "",
@@ -668,31 +657,9 @@
       "change_30d": null
     },
     {
-      "address": "bc1qs4z2d3h5je080f74tax92dwg08sf3hylj9vfg3",
-      "balance_btc": 9068.0,
-      "balance_usd": 587787760.0,
-      "tier": "$100M+",
-      "tx_count": 47,
-      "label": "",
-      "change_1d": 0.0,
-      "change_7d": 131.0,
-      "change_30d": null
-    },
-    {
-      "address": "bc1q7uq3u829ahn22sdlpac0h0lurq3a9yfd3ew69f",
-      "balance_btc": 9068.0,
-      "balance_usd": 587787760.0,
-      "tier": "$100M+",
-      "tx_count": 75,
-      "label": "",
-      "change_1d": 0.0,
-      "change_7d": 131.0,
-      "change_30d": null
-    },
-    {
       "address": "167ZWTT8n6s4ya8cGjqNNQjDwDGY31vmHg",
       "balance_btc": 8999.0,
-      "balance_usd": 583315180.0,
+      "balance_usd": 577276851.0,
       "tier": "$100M+",
       "tx_count": 102,
       "label": "",
@@ -703,7 +670,7 @@
     {
       "address": "bc1q8wyf76hse8w4dr0qmmapmnuywlpf2upv5are5y9993gdsnvdt97qsem5pp",
       "balance_btc": 8614.0,
-      "balance_usd": 558359480.0,
+      "balance_usd": 552579486.0,
       "tier": "$100M+",
       "tx_count": 103,
       "label": "",
@@ -714,7 +681,7 @@
     {
       "address": "3CybbwzZmteP8gSwk5c7r8jirMziPVGkqw",
       "balance_btc": 8611.0,
-      "balance_usd": 558165020.0,
+      "balance_usd": 552387039.0,
       "tier": "$100M+",
       "tx_count": 104,
       "label": "",
@@ -723,31 +690,31 @@
       "change_30d": null
     },
     {
+      "address": "12VuUfQHTGqWDvBzm8TBad1mZBm4hjGEzN",
+      "balance_btc": 8579.0,
+      "balance_usd": 550334271.0,
+      "tier": "$100M+",
+      "tx_count": 787,
+      "label": "",
+      "change_1d": 223.0,
+      "change_7d": 171.0,
+      "change_30d": null
+    },
+    {
       "address": "187zSqAYwMKJAxWdWQ4fmp5DyT6G2NPgD7",
       "balance_btc": 8539.0,
-      "balance_usd": 553497980.0,
+      "balance_usd": 547768311.0,
       "tier": "$100M+",
-      "tx_count": 105,
+      "tx_count": 106,
       "label": "",
       "change_1d": 0.0,
       "change_7d": 0.0,
       "change_30d": null
     },
     {
-      "address": "12VuUfQHTGqWDvBzm8TBad1mZBm4hjGEzN",
-      "balance_btc": 8356.0,
-      "balance_usd": 541635920.0,
-      "tier": "$100M+",
-      "tx_count": 785,
-      "label": "",
-      "change_1d": 443.0,
-      "change_7d": 25.0,
-      "change_30d": null
-    },
-    {
       "address": "bc1q32lyrhp9zpww22phqjwwmelta0c8a5q990ghs6",
       "balance_btc": 8186.0,
-      "balance_usd": 530616520.0,
+      "balance_usd": 525123714.0,
       "tier": "$100M+",
       "tx_count": 416,
       "label": "Ceffu-coldwallet",
@@ -758,7 +725,7 @@
     {
       "address": "1MwQyJLNerHPVMTQXKAbQrnwF9VortvuAf",
       "balance_btc": 8150.0,
-      "balance_usd": 528283000.0,
+      "balance_usd": 522814350.0,
       "tier": "$100M+",
       "tx_count": 108,
       "label": "",
@@ -769,7 +736,7 @@
     {
       "address": "3MsfxyCEY5B4NUwKP66iqsbZsS5XRDm3Vj",
       "balance_btc": 8145.0,
-      "balance_usd": 527958900.0,
+      "balance_usd": 522493605.0,
       "tier": "$100M+",
       "tx_count": 109,
       "label": "",
@@ -780,7 +747,7 @@
     {
       "address": "1LVYbnSX6f6vE2Zn4zs2oZ4eKyBgzkqaay",
       "balance_btc": 8066.0,
-      "balance_usd": 522838120.0,
+      "balance_usd": 517425834.0,
       "tier": "$100M+",
       "tx_count": 110,
       "label": "",
@@ -791,7 +758,7 @@
     {
       "address": "18zuLTKQnLjp987LdxuYvjekYnNAvXif2b",
       "balance_btc": 8021.0,
-      "balance_usd": 519921220.0,
+      "balance_usd": 514539129.0,
       "tier": "$100M+",
       "tx_count": 111,
       "label": "",
@@ -802,7 +769,7 @@
     {
       "address": "3PWn1AGqo8HWH8mXSsxx1Ytk87zMAAziFU",
       "balance_btc": 8000.0,
-      "balance_usd": 518560000.0,
+      "balance_usd": 513192000.0,
       "tier": "$100M+",
       "tx_count": 112,
       "label": "",
@@ -813,7 +780,7 @@
     {
       "address": "198aMn6ZYAczwrE5NvNTUMyJ5qkfy4g3Hi",
       "balance_btc": 8000.0,
-      "balance_usd": 518560000.0,
+      "balance_usd": 513192000.0,
       "tier": "$100M+",
       "tx_count": 133,
       "label": "",
@@ -824,7 +791,7 @@
     {
       "address": "bc1qfn9ljy4g7kdpl4stlyys030wpstcep03w9rvx2",
       "balance_btc": 7963.0,
-      "balance_usd": 516161660.0,
+      "balance_usd": 510818487.0,
       "tier": "$100M+",
       "tx_count": 114,
       "label": "",
@@ -835,7 +802,7 @@
     {
       "address": "15Z5YJaaNSxeynvr6uW6jQZLwq3n1Hu6RX",
       "balance_btc": 7941.0,
-      "balance_usd": 514735620.0,
+      "balance_usd": 509407209.0,
       "tier": "$100M+",
       "tx_count": 136,
       "label": "559",
@@ -846,18 +813,18 @@
     {
       "address": "bc1qzkqmyv57jpuntyc9ydjyrq4hlneevrmr0xe9kz",
       "balance_btc": 7809.0,
-      "balance_usd": 506179380.0,
+      "balance_usd": 500939541.0,
       "tier": "$100M+",
       "tx_count": 137,
       "label": "",
       "change_1d": 0.0,
-      "change_7d": 155.0,
+      "change_7d": 0.0,
       "change_30d": null
     },
     {
       "address": "14SLfUpZAF8SCNvfjSh65dfMyPaFy8n46P",
       "balance_btc": 7657.0,
-      "balance_usd": 496326740.0,
+      "balance_usd": 491188893.0,
       "tier": "$100M+",
       "tx_count": 117,
       "label": "",
@@ -867,19 +834,19 @@
     },
     {
       "address": "bc1q8urxlm2uye3t6nwg0y44sn32p0ynvefxpqseu4",
-      "balance_btc": 7567.0,
-      "balance_usd": 490492940.0,
+      "balance_btc": 7572.0,
+      "balance_usd": 485736228.0,
       "tier": "$100M+",
-      "tx_count": 3052,
+      "tx_count": 3053,
       "label": "98590549",
-      "change_1d": 7.0,
-      "change_7d": 32.0,
+      "change_1d": 5.0,
+      "change_7d": 37.0,
       "change_30d": null
     },
     {
       "address": "bc1qk2q9ptkvfrtt3769hh85zvq88jyrulk6zgys2h",
       "balance_btc": 7500.0,
-      "balance_usd": 486150000.0,
+      "balance_usd": 481117500.0,
       "tier": "$100M+",
       "tx_count": 120,
       "label": "",
@@ -890,7 +857,7 @@
     {
       "address": "bc1qmxcueaqr9gv4t9c44xc6473ltvtspjgzpucccr",
       "balance_btc": 7499.0,
-      "balance_usd": 486085180.0,
+      "balance_usd": 481053351.0,
       "tier": "$100M+",
       "tx_count": 121,
       "label": "",
@@ -901,7 +868,7 @@
     {
       "address": "34ovCavdkQgEYbrJk9Q1onhK7uWqq6J7DC",
       "balance_btc": 7411.0,
-      "balance_usd": 480381020.0,
+      "balance_usd": 475408239.0,
       "tier": "$100M+",
       "tx_count": 126,
       "label": "45505834",
@@ -912,7 +879,7 @@
     {
       "address": "1pChUJ9WQhWtqyt5RtSnLarZYQztZsbzi",
       "balance_btc": 7330.0,
-      "balance_usd": 475130600.0,
+      "balance_usd": 470212170.0,
       "tier": "$100M+",
       "tx_count": 124,
       "label": "107637282",
@@ -923,7 +890,7 @@
     {
       "address": "bc1q0y5m6wdxjre0fs9m3u0j3pv2fcja6qw3a2f6ql",
       "balance_btc": 7028.0,
-      "balance_usd": 455554960.0,
+      "balance_usd": 450839172.0,
       "tier": "$100M+",
       "tx_count": 125,
       "label": "",
@@ -934,9 +901,9 @@
     {
       "address": "bc1q72nyp6mzxjxm02j7t85pg0pq24684zdj2wuweu",
       "balance_btc": 7000.0,
-      "balance_usd": 453740000.0,
+      "balance_usd": 449043000.0,
       "tier": "$100M+",
-      "tx_count": 46,
+      "tx_count": 45,
       "label": "",
       "change_1d": 0.0,
       "change_7d": -5164.0,
@@ -945,7 +912,7 @@
     {
       "address": "13eEt6myAo1zAC7o7RK5sVxxCNCAgd6ApH",
       "balance_btc": 7000.0,
-      "balance_usd": 453740000.0,
+      "balance_usd": 449043000.0,
       "tier": "$100M+",
       "tx_count": 126,
       "label": "",
@@ -956,7 +923,7 @@
     {
       "address": "1DzjE3ANaKLasY2n6e5ToJ4CQCXrvDvwsf",
       "balance_btc": 7000.0,
-      "balance_usd": 453740000.0,
+      "balance_usd": 449043000.0,
       "tier": "$100M+",
       "tx_count": 127,
       "label": "",
@@ -967,7 +934,7 @@
     {
       "address": "324rP14bzX8kW1JWt1J8ohZjDFyt2G68Kq",
       "balance_btc": 7000.0,
-      "balance_usd": 453740000.0,
+      "balance_usd": 449043000.0,
       "tier": "$100M+",
       "tx_count": 128,
       "label": "",
@@ -978,7 +945,7 @@
     {
       "address": "1FJuzzQFVMbiMGw6JtcXefdD64amy7mSCF",
       "balance_btc": 6999.0,
-      "balance_usd": 453675180.0,
+      "balance_usd": 448978851.0,
       "tier": "$100M+",
       "tx_count": 129,
       "label": "",
@@ -989,7 +956,7 @@
     {
       "address": "186XqVoL7TGxR3osoo4xn32wbYtb527raY",
       "balance_btc": 6977.0,
-      "balance_usd": 452249140.0,
+      "balance_usd": 447567573.0,
       "tier": "$100M+",
       "tx_count": 130,
       "label": "",
@@ -1000,7 +967,7 @@
     {
       "address": "bc1qxexs075s9zy7qw7dclqfksjp57p39qmd76268vmxcnd3fycucleqtpwnu8",
       "balance_btc": 6897.0,
-      "balance_usd": 447063540.0,
+      "balance_usd": 442435653.0,
       "tier": "$100M+",
       "tx_count": 131,
       "label": "",
@@ -1011,7 +978,7 @@
     {
       "address": "1Ac2JdpQ5c9NeSajdGx6dofxeXkn4S35ft",
       "balance_btc": 6878.0,
-      "balance_usd": 445831960.0,
+      "balance_usd": 441216822.0,
       "tier": "$100M+",
       "tx_count": 132,
       "label": "",
@@ -1021,19 +988,19 @@
     },
     {
       "address": "bc1qefquzwru2k8f4m2guh2rs388l9q73qecf0dejm",
-      "balance_btc": 6772.0,
-      "balance_usd": 438961040.0,
+      "balance_btc": 6770.0,
+      "balance_usd": 434288730.0,
       "tier": "$100M+",
-      "tx_count": 412,
+      "tx_count": 413,
       "label": "",
-      "change_1d": -3.0,
-      "change_7d": 2.0,
+      "change_1d": -2.0,
+      "change_7d": 0.0,
       "change_30d": null
     },
     {
       "address": "32o7DBUDc2RSJmg9T37wGrxP1NxsBgmtEG",
       "balance_btc": 6760.0,
-      "balance_usd": 438183200.0,
+      "balance_usd": 433647240.0,
       "tier": "$100M+",
       "tx_count": 134,
       "label": "",
@@ -1044,7 +1011,7 @@
     {
       "address": "bc1qcfkga3lyvflf53vt0n2hjd9mr03870pvjw2z72",
       "balance_btc": 6757.0,
-      "balance_usd": 437988740.0,
+      "balance_usd": 433454793.0,
       "tier": "$100M+",
       "tx_count": 135,
       "label": "",
@@ -1055,7 +1022,7 @@
     {
       "address": "1AYLzYN7SGu5FQLBTADBzqKm4b6Udt6Bw6",
       "balance_btc": 6512.0,
-      "balance_usd": 422107840.0,
+      "balance_usd": 417738288.0,
       "tier": "$100M+",
       "tx_count": 136,
       "label": "",
@@ -1066,7 +1033,7 @@
     {
       "address": "1NpZcfBnaJeoRT9ZqwZVRMw3SRs546VsuE",
       "balance_btc": 6507.0,
-      "balance_usd": 421783740.0,
+      "balance_usd": 417417543.0,
       "tier": "$100M+",
       "tx_count": 199,
       "label": "",
@@ -1077,7 +1044,7 @@
     {
       "address": "bc1ps450ed869jpspyy78rf50zn00azx3mxqsj9f6cdzgj2qcr6pevvq7qkxkr",
       "balance_btc": 6500.0,
-      "balance_usd": 421330000.0,
+      "balance_usd": 416968500.0,
       "tier": "$100M+",
       "tx_count": 138,
       "label": "",
@@ -1088,7 +1055,7 @@
     {
       "address": "bc1qrxhrm90p6qccryymrugwknt42je5kv0wd7c50tdhx70fa6yclv8sz6uvd3",
       "balance_btc": 6500.0,
-      "balance_usd": 421330000.0,
+      "balance_usd": 416968500.0,
       "tier": "$100M+",
       "tx_count": 139,
       "label": "",
@@ -1099,7 +1066,7 @@
     {
       "address": "bc1qsmxgprvcj8y4qcs59w48qxqachgakukmwsgk48",
       "balance_btc": 6401.0,
-      "balance_usd": 414912820.0,
+      "balance_usd": 410617749.0,
       "tier": "$100M+",
       "tx_count": 141,
       "label": "",
@@ -1109,28 +1076,61 @@
     },
     {
       "address": "3FsnCQKoqVESiKaXbtE3cgxrtCfGcq5aq8",
-      "balance_btc": 6369.0,
-      "balance_usd": 412838580.0,
+      "balance_btc": 6366.0,
+      "balance_usd": 408372534.0,
       "tier": "$100M+",
       "tx_count": 142,
       "label": "",
-      "change_1d": 0.0,
-      "change_7d": -272.0,
+      "change_1d": -3.0,
+      "change_7d": -275.0,
       "change_30d": null
     },
     {
       "address": "1Cr7EjvS8C7gfarREHCvFhd9gT3r46pfLb",
       "balance_btc": 6321.0,
-      "balance_usd": 409727220.0,
+      "balance_usd": 405485829.0,
       "tier": "$100M+",
       "tx_count": 143,
       "label": "",
       "change_1d": 0.0,
       "change_7d": 0.0,
       "change_30d": null
+    },
+    {
+      "address": "1JxmKkNK1b3p7r8DDPtnNmGeLZDcgPadJb",
+      "balance_btc": 6316.0,
+      "balance_usd": 405165084.0,
+      "tier": "$100M+",
+      "tx_count": 144,
+      "label": "",
+      "change_1d": null,
+      "change_7d": null,
+      "change_30d": null
+    },
+    {
+      "address": "1LBBmkr9muf7RjjBbzQQvzNQpRRaVEnavs",
+      "balance_btc": 6200.0,
+      "balance_usd": 397723800.0,
+      "tier": "$100M+",
+      "tx_count": 145,
+      "label": "",
+      "change_1d": null,
+      "change_7d": null,
+      "change_30d": null
+    },
+    {
+      "address": "bc1qfflzlmk8mj97mht8w9aq7w6lwc34xwww2hthy2",
+      "balance_btc": 6163.0,
+      "balance_usd": 395350287.0,
+      "tier": "$100M+",
+      "tx_count": 146,
+      "label": "",
+      "change_1d": null,
+      "change_7d": null,
+      "change_30d": null
     }
   ],
   "large_transfers": [],
-  "cex_excluded": 28,
+  "cex_excluded": 29,
   "source": "bitinfocharts.com"
 }
